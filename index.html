@@ -505,18 +505,21 @@ footer{background:var(--dark);padding:5rem 0 3rem}
       <div class="form-wrap fi">
         <div class="form-title">Formulario de consulta</div>
         <p class="form-sub">Le contactaremos en menos de 24 horas hábiles.</p>
-        <div class="form-row">
-          <div class="fg"><label>Nombre completo</label><input type="text" placeholder="Juan García"></div>
-          <div class="fg"><label>Empresa</label><input type="text" placeholder="Mi Empresa S.A."></div>
-        </div>
-        <div class="form-row">
-          <div class="fg"><label>Teléfono</label><input type="tel" placeholder="993 000 0000"></div>
-          <div class="fg"><label>Correo electrónico</label><input type="email" placeholder="correo@empresa.com"></div>
-        </div>
-        <div class="fg"><label>Área de interés</label><select><option value="">Seleccione una opción</option><option>Laboral</option><option>Mercantil y Corporativo</option><option>Administrativo y Amparo</option><option>Penal</option><option>Civil y Familiar</option><option>Otro asunto</option></select></div>
-        <div class="fg"><label>Descripción del asunto</label><textarea placeholder="Describa brevemente su situación jurídica..."></textarea></div>
-        <button class="btn-submit">Solicitar diagnóstico legal →</button>
-        <p class="privacy-note">Al enviar acepta nuestro <a href="#privacidad">Aviso de Privacidad</a>. Su información es confidencial.</p>
+        <form action="https://formspree.io/f/xdabgkaz" method="POST" id="contactForm">
+          <div class="form-row">
+            <div class="fg"><label>Nombre completo</label><input type="text" name="nombre" placeholder="Juan García" required></div>
+            <div class="fg"><label>Empresa</label><input type="text" name="empresa" placeholder="Mi Empresa S.A."></div>
+          </div>
+          <div class="form-row">
+            <div class="fg"><label>Teléfono</label><input type="tel" name="telefono" placeholder="993 000 0000"></div>
+            <div class="fg"><label>Correo electrónico</label><input type="email" name="email" placeholder="correo@empresa.com" required></div>
+          </div>
+          <div class="fg"><label>Área de interés</label><select name="area"><option value="">Seleccione una opción</option><option>Laboral</option><option>Mercantil y Corporativo</option><option>Administrativo y Amparo</option><option>Penal</option><option>Civil y Familiar</option><option>Otro asunto</option></select></div>
+          <div class="fg"><label>Descripción del asunto</label><textarea name="mensaje" placeholder="Describa brevemente su situación jurídica..."></textarea></div>
+          <div id="formMsg" style="display:none;padding:.7rem 1rem;margin-bottom:.8rem;font-size:.85rem;font-weight:600"></div>
+          <button type="submit" class="btn-submit" id="submitBtn">Solicitar diagnóstico legal →</button>
+          <p class="privacy-note">Al enviar acepta nuestro <a href="#privacidad">Aviso de Privacidad</a>. Su información es confidencial.</p>
+        </form>
       </div>
     </div>
   </div>
@@ -618,6 +621,43 @@ setTimeout(() => {
   const logoImg = document.querySelector('.nav-logo img');
   if (logoImg) logoImg.style.opacity = '1';
 }, 300);
+
+
+// Formulario de contacto — Formspree
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+  contactForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const msg = document.getElementById('formMsg');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://formspree.io/f/xdabgkaz', {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        msg.style.display = 'block';
+        msg.style.background = '#dcfce7';
+        msg.style.color = '#166534';
+        msg.textContent = '✓ Mensaje enviado. Le contactaremos en menos de 24 horas hábiles.';
+        contactForm.reset();
+        btn.textContent = 'Mensaje enviado ✓';
+      } else {
+        throw new Error();
+      }
+    } catch {
+      msg.style.display = 'block';
+      msg.style.background = '#fee2e2';
+      msg.style.color = '#991b1b';
+      msg.textContent = '✕ Error al enviar. Por favor intente de nuevo o escríbanos a sci@solucionescorporativas.mx';
+      btn.textContent = 'Solicitar diagnóstico legal →';
+      btn.disabled = false;
+    }
+  });
+}
 
 </script>
 
