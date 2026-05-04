@@ -505,7 +505,7 @@ footer{background:var(--dark);padding:5rem 0 3rem}
       <div class="form-wrap fi">
         <div class="form-title">Formulario de consulta</div>
         <p class="form-sub">Le contactaremos en menos de 24 horas hábiles.</p>
-        <form action="https://formspree.io/f/xdabgkaz" method="POST" id="contactForm">
+        <form action="https://formspree.io/f/mkoyroyv" method="POST" id="contactForm">
           <div class="form-row">
             <div class="fg"><label>Nombre completo</label><input type="text" name="nombre" placeholder="Juan García" required></div>
             <div class="fg"><label>Empresa</label><input type="text" name="empresa" placeholder="Mi Empresa S.A."></div>
@@ -633,7 +633,7 @@ if (contactForm) {
     btn.textContent = 'Enviando...';
     btn.disabled = true;
     try {
-      const res = await fetch('https://formspree.io/f/xdabgkaz', {
+      const res = await fetch('https://formspree.io/f/mkoyroyv', {
         method: 'POST',
         body: new FormData(contactForm),
         headers: { 'Accept': 'application/json' }
